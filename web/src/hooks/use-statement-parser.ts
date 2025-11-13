@@ -89,9 +89,21 @@ export function useStatementParser() {
       const seededTransactions = applyDefaultCategories(allTransactions);
       setState({ summaries, transactions: seededTransactions, warnings });
       if (allTransactions.length === 0) {
-        setError(
-          "No transactions were detected. Please confirm the statement includes clear Date, Description, and Withdrawal/Deposit columns."
+        // Try to provide helpful error message based on warnings
+        const columnWarnings = warnings.filter((w) => 
+          w.message.includes("Available columns:")
         );
+        
+        if (columnWarnings.length > 0 && columnWarnings[0].context?.availableColumns) {
+          const cols = columnWarnings[0].context.availableColumns as string;
+          setError(
+            `No transactions were detected. Found columns: ${cols}. Please ensure your file has columns for Date, Description, and either Amount or Withdrawal/Deposit.`
+          );
+        } else {
+          setError(
+            "No transactions were detected. Please confirm the statement includes clear Date, Description, and Withdrawal/Deposit columns."
+          );
+        }
       } else {
         setError(null);
       }

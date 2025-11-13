@@ -33,6 +33,10 @@ const DATE_CANDIDATES = [
   "value date",
   "statement date",
   "txn date",
+  "trans date",
+  "tran date",
+  "value dt",
+  "txn dt",
 ];
 
 const DESCRIPTION_CANDIDATES = [
@@ -43,6 +47,11 @@ const DESCRIPTION_CANDIDATES = [
   "particulars",
   "memo",
   "transaction details",
+  "trans details",
+  "transaction description",
+  "remarks",
+  "purpose",
+  "payee",
 ];
 
 const AMOUNT_CANDIDATES = [
@@ -50,14 +59,27 @@ const AMOUNT_CANDIDATES = [
   "transaction amount",
   "amt",
   "value",
+  "trans amount",
 ];
 
-const CREDIT_CANDIDATES = ["credit", "cr", "cr amount"];
-const DEBIT_CANDIDATES = ["debit", "dr", "dr amount"];
-const WITHDRAWAL_CANDIDATES = ["withdrawal amt.", "withdrawal amount"];
-const DEPOSIT_CANDIDATES = ["deposit amt.", "deposit amount"];
+const CREDIT_CANDIDATES = ["credit", "cr", "cr amount", "credits", "credit amt"];
+const DEBIT_CANDIDATES = ["debit", "dr", "dr amount", "debits", "debit amt"];
+const WITHDRAWAL_CANDIDATES = [
+  "withdrawal amt.",
+  "withdrawal amount",
+  "withdrawal",
+  "withdrawals",
+  "withdrawal amt",
+];
+const DEPOSIT_CANDIDATES = [
+  "deposit amt.",
+  "deposit amount",
+  "deposit",
+  "deposits",
+  "deposit amt",
+];
 
-const TYPE_CANDIDATES = ["type", "transaction type", "debit/credit"];
+const TYPE_CANDIDATES = ["type", "transaction type", "debit/credit", "dr/cr"];
 
 export interface NormalizeOptions {
   fileName: string;
@@ -89,9 +111,14 @@ export function normalizeRecord(
   const rawDescription = normalizedKeys.get("description");
 
   if (!rawDate || !rawDescription) {
+    const availableColumns = Object.keys(raw).join(", ");
+    const missing = [];
+    if (!rawDate) missing.push("date");
+    if (!rawDescription) missing.push("description");
+    
     warnings.push({
-      message: "Missing required fields (date or description).",
-      context: { raw },
+      message: `Missing required fields: ${missing.join(", ")}. Available columns: ${availableColumns}`,
+      context: { raw, availableColumns, missingFields: missing },
     });
     return { transaction: null, warnings };
   }
@@ -155,6 +182,7 @@ function mapKeys(raw: Record<string, unknown>) {
   for (const [key, value] of Object.entries(raw)) {
     const normalizedKey = key.trim().toLowerCase();
 
+    // Try exact match first
     if (DATE_CANDIDATES.includes(normalizedKey) && !map.has("date")) {
       map.set("date", value);
       continue;
@@ -203,6 +231,52 @@ function mapKeys(raw: Record<string, unknown>) {
 
     if (TYPE_CANDIDATES.includes(normalizedKey) && !map.has("typeColumn")) {
       map.set("typeColumn", value);
+      continue;
+    }
+
+    // Fallback: fuzzy matching for common patterns
+    if (!map.has("date") && normalizedKey.includes("date")) {
+      map.set("date", value);
+      continue;
+    }
+
+    if (
+      !map.has("description") &&
+      (normalizedKey.includes("description") ||
+        normalizedKey.includes("narration") ||
+        normalizedKey.includes("detail") ||
+        normalizedKey.includes("particulars") ||
+        normalizedKey.includes("remark"))
+    ) {
+      map.set("description", value);
+      continue;
+    }
+
+    if (
+      !map.has("creditColumn") &&
+      (normalizedKey.includes("credit") ||
+        normalizedKey.includes("deposit") ||
+        normalizedKey === "cr")
+    ) {
+      map.set("creditColumn", value);
+      continue;
+    }
+
+    if (
+      !map.has("debitColumn") &&
+      (normalizedKey.includes("debit") ||
+        normalizedKey.includes("withdrawal") ||
+        normalizedKey === "dr")
+    ) {
+      map.set("debitColumn", value);
+      continue;
+    }
+
+    if (
+      !map.has("amountColumn") &&
+      (normalizedKey.includes("amount") || normalizedKey.includes("amt"))
+    ) {
+      map.set("amountColumn", value);
       continue;
     }
   }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { Transaction } from "@/types/models";
+import type { AccountType, Transaction } from "@/types/models";
 import { applyDefaultCategories } from "@/lib/categorization/default-categories";
 import {
   parseStatementFiles,
@@ -14,6 +14,9 @@ export interface StatementParseSummary {
   format: StatementFormat;
   transactionCount: number;
   warnings: ParseWarning[];
+  accountType: AccountType;
+  bankName: string | null;
+  accountNumber: string | null;
 }
 
 interface StatementParserState {
@@ -173,6 +176,9 @@ function buildSummary(
     format: result.format,
     transactionCount: result.transactions.length,
     warnings: result.warnings,
+    accountType: result.metadata.accountType,
+    bankName: result.metadata.bankName,
+    accountNumber: result.metadata.accountNumber,
   };
 }
 

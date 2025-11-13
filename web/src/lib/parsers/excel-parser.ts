@@ -2,7 +2,8 @@ import { read, utils } from "xlsx";
 
 import { inferAccountType } from "./account-type";
 import { normalizeRecord } from "./normalize";
-import type { ParseContext, ParseResult } from "./types";
+import type { ParseContext, ParseResult, StatementMetadata } from "./types";
+import type { Transaction } from "@/types/models";
 
 export async function parseExcel(context: ParseContext): Promise<ParseResult> {
   const accountType =
@@ -21,6 +22,7 @@ export async function parseExcel(context: ParseContext): Promise<ParseResult> {
           message: "No worksheets found in Excel file.",
         },
       ],
+      metadata: createMetadata([], accountType),
     };
   }
 
@@ -46,7 +48,11 @@ export async function parseExcel(context: ParseContext): Promise<ParseResult> {
       message:
         "Unable to locate the transaction header row. Please ensure the sheet contains columns such as Date, Narration, and Withdrawal/Deposit amounts.",
     });
-    return { transactions: [], warnings };
+    return {
+      transactions: [],
+      warnings,
+      metadata: createMetadata([], accountType),
+    };
   }
 
   const headerRow = allRows[headerIndex].map((cell) =>
@@ -56,7 +62,11 @@ export async function parseExcel(context: ParseContext): Promise<ParseResult> {
   const rangeRef = sheet["!ref"];
   if (!rangeRef) {
     warnings.push({ message: "Worksheet range information missing." });
-    return { transactions: [], warnings };
+    return {
+      transactions: [],
+      warnings,
+      metadata: createMetadata([], accountType),
+    };
   }
 
   const range = utils.decode_range(rangeRef);
@@ -70,7 +80,7 @@ export async function parseExcel(context: ParseContext): Promise<ParseResult> {
     blankrows: false,
   });
 
-  const transactions = [];
+  const transactions: Transaction[] = [];
   for (const row of rows) {
     if (isRepeatedHeaderRow(row) || isNoiseRow(row)) {
       continue;
@@ -85,7 +95,7 @@ export async function parseExcel(context: ParseContext): Promise<ParseResult> {
     }
   }
 
-  return { transactions, warnings };
+  return { transactions, warnings, metadata: createMetadata(transactions, accountType) };
 }
 
 function isHeaderRow(row: (string | number)[]) {
@@ -126,6 +136,23 @@ function isNoiseRow(row: Record<string, unknown>) {
     return true;
   }
   return false;
+}
+
+function createMetadata(
+  transactions: Transaction[],
+  accountType: ParseContext["accountType"]
+): StatementMetadata {
+  const bankName =
+    transactions.find((transaction) => transaction.bankName)?.bankName ?? null;
+  const accountNumber =
+    transactions.find((transaction) => transaction.accountNumber)
+      ?.accountNumber ?? null;
+
+  return {
+    accountType: accountType ?? "bank",
+    bankName,
+    accountNumber,
+  };
 }
 
 

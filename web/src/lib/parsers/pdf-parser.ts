@@ -6,7 +6,13 @@ import type {
 
 import { inferAccountType } from "./account-type";
 import { normalizeRecord } from "./normalize";
-import type { ParseContext, ParseResult, ParseWarning } from "./types";
+import type {
+  ParseContext,
+  ParseResult,
+  ParseWarning,
+  StatementMetadata,
+} from "./types";
+import type { Transaction } from "@/types/models";
 
 const WORKER_PATH = "/vendor/pdf.worker.min.mjs";
 
@@ -43,7 +49,7 @@ export async function parsePdf(context: ParseContext): Promise<ParseResult> {
     }
   }
 
-  const transactions = [];
+  const transactions: Transaction[] = [];
   for (const row of rows) {
     const { transaction, warnings: rowWarnings } = normalizeRecord(row, {
       fileName: context.file.name,
@@ -55,7 +61,7 @@ export async function parsePdf(context: ParseContext): Promise<ParseResult> {
     }
   }
 
-  return { transactions, warnings };
+  return { transactions, warnings, metadata: createMetadata(transactions, accountType) };
 }
 
 function groupLines(textContent: TextContent): string[] {
@@ -122,6 +128,23 @@ function parseLine(line: string): Record<string, unknown> | null {
     description: descriptionParts.join(" "),
     amount,
     type: potentialType,
+  };
+}
+
+function createMetadata(
+  transactions: Transaction[],
+  accountType: ParseContext["accountType"]
+): StatementMetadata {
+  const bankName =
+    transactions.find((transaction) => transaction.bankName)?.bankName ?? null;
+  const accountNumber =
+    transactions.find((transaction) => transaction.accountNumber)
+      ?.accountNumber ?? null;
+
+  return {
+    accountType: accountType ?? "bank",
+    bankName,
+    accountNumber,
   };
 }
 

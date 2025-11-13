@@ -45,13 +45,18 @@ function resolveParser(format: StatementFormat) {
         return parsePdf({ file, accountType });
       };
     default:
-      return async () => ({
+      return async (_file: File, accountType?: AccountType) => ({
         transactions: [],
         warnings: [
           {
             message: "Unsupported file format.",
           },
         ],
+        metadata: {
+          accountType: accountType ?? "bank",
+          bankName: null,
+          accountNumber: null,
+        },
       });
   }
 }

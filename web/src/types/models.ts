@@ -10,6 +10,8 @@ export interface Transaction {
   type: TransactionType;
   accountType: AccountType;
   sourceFileName: string;
+  bankName?: string | null;
+  accountNumber?: string | null;
   category?: string | null;
   subcategory?: string | null;
   isRecurring?: boolean;

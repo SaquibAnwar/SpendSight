@@ -22,6 +22,7 @@ type ColumnKey =
   | "description"
   | "amount"
   | "type"
+  | "account"
   | "category"
   | "subcategory"
   | "status"
@@ -32,6 +33,7 @@ const INITIAL_WIDTHS: Record<ColumnKey, number> = {
   description: 260,
   amount: 120,
   type: 110,
+  account: 240,
   category: 150,
   subcategory: 150,
   status: 110,
@@ -204,6 +206,12 @@ export function TransactionReviewTable({
                 Type
               </ResizableHead>
               <ResizableHead
+                width={columnWidths.account}
+                onMouseDown={startResize("account")}
+              >
+                Account
+              </ResizableHead>
+              <ResizableHead
                 width={columnWidths.category}
                 onMouseDown={startResize("category")}
               >
@@ -233,7 +241,7 @@ export function TransactionReviewTable({
             {filteredTransactions.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="py-8 text-center text-sm text-muted-foreground"
                 >
                   No transactions to review.
@@ -332,6 +340,39 @@ function EditableRow({
         }}
       >
         {transaction.type}
+      </TableCell>
+      <TableCell
+        className="text-sm"
+        style={{
+          width: columnWidths.account,
+          minWidth: columnWidths.account,
+          maxWidth: columnWidths.account,
+        }}
+      >
+        <div className="flex flex-col gap-1 overflow-hidden">
+          <span
+            className="font-medium truncate"
+            title={
+              transaction.bankName ??
+              transaction.accountType.replace("-", " ")
+            }
+          >
+            {transaction.bankName ??
+              transaction.accountType.replace("-", " ")}
+          </span>
+          <span
+            className="text-xs text-muted-foreground truncate"
+            title={transaction.accountNumber ?? "No account #"}
+          >
+            {transaction.accountNumber ?? "No account #"}
+          </span>
+          <span
+            className="text-xs text-muted-foreground truncate"
+            title={transaction.sourceFileName}
+          >
+            {transaction.sourceFileName}
+          </span>
+        </div>
       </TableCell>
       <TableCell
         style={{

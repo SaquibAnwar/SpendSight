@@ -39,6 +39,11 @@ describe("statement parsing utilities", () => {
       date: "2024-01-01",
     });
     expect(result.warnings).toHaveLength(0);
+    expect(result.metadata).toMatchObject({
+      accountType: "bank",
+      bankName: null,
+      accountNumber: null,
+    });
   });
 
   it("returns warnings when required fields are missing", () => {
@@ -81,6 +86,38 @@ describe("statement parsing utilities", () => {
     expect(warnings.length).toBeGreaterThan(0);
     expect(warnings[0].message).toContain("Available columns:");
     expect(warnings[0].message).toContain("Unknown Column");
+  });
+
+  it("captures bank metadata when available", async () => {
+    const csv = new File(
+      ["Date,Description,Amount,Bank Name,Account Number\n2024-02-01,Rent Payment,-1200.00,Sample Bank,9876543210"],
+      "multi-bank.csv",
+      { type: "text/csv" }
+    );
+    const result = await parseStatementFile(csv);
+    expect(result.metadata).toMatchObject({
+      accountType: "bank",
+      bankName: "Sample Bank",
+      accountNumber: "9876543210",
+    });
+  });
+
+  it("normalises account metadata from raw rows", () => {
+    const { transaction } = normalizeRecord(
+      {
+        Date: "2024-03-05",
+        Description: "Utility Bill",
+        Amount: "-75.35",
+        "Bank Name": "City Credit Union",
+        "Account Number": "ACC-12345",
+      },
+      { fileName: "utility.csv", accountType: "bank" }
+    );
+    expect(transaction).not.toBeNull();
+    expect(transaction).toMatchObject({
+      bankName: "City Credit Union",
+      accountNumber: "ACC-12345",
+    });
   });
 });
 

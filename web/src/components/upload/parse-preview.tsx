@@ -72,17 +72,38 @@ export function ParsePreview({
                 {summary.transactionCount} transactions detected
               </CardDescription>
             </CardHeader>
-            {summary.warnings.length > 0 && (
-              <CardContent>
-                <ul className="space-y-1 text-xs text-muted-foreground">
-                  {summary.warnings.slice(0, 3).map((warning, index) => (
-                    <li key={`${summary.fileName}-warning-${index}`}>
-                      • {warning.message}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            )}
+            <CardContent className="space-y-3 text-xs text-muted-foreground">
+              <div className="grid gap-2 sm:grid-cols-2">
+                <p className="truncate">
+                  <span className="font-medium text-foreground">Institution:</span>{" "}
+                  <span title={summary.bankName ?? "Not detected"} className="truncate">
+                    {summary.bankName ?? "Not detected"}
+                  </span>
+                </p>
+                <p className="truncate">
+                  <span className="font-medium text-foreground">Account #:</span>{" "}
+                  <span title={summary.accountNumber ?? "Not detected"} className="truncate">
+                    {summary.accountNumber ?? "Not detected"}
+                  </span>
+                </p>
+              </div>
+              <p>
+                <span className="font-medium text-foreground">Account Type:</span>{" "}
+                {summary.accountType.replace("-", " ")}
+              </p>
+              {summary.warnings.length > 0 && (
+                <div className="space-y-1">
+                  <p className="font-medium text-foreground">Warnings</p>
+                  <ul className="space-y-1">
+                    {summary.warnings.slice(0, 3).map((warning, index) => (
+                      <li key={`${summary.fileName}-warning-${index}`}>
+                        • {warning.message}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </CardContent>
           </Card>
         ))}
       </div>
@@ -103,7 +124,7 @@ export function ParsePreview({
                 <TableHead>Description</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Account</TableHead>
+                <TableHead>Account details</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -130,9 +151,32 @@ export function ParsePreview({
                     <TableCell className="capitalize">
                       {transaction.type}
                     </TableCell>
-                    <TableCell className="capitalize">
-                      {transaction.accountType.replace("-", " ")}
-                    </TableCell>
+                  <TableCell className="align-top">
+                    <div className="flex flex-col gap-1 overflow-hidden">
+                      <span
+                        className="text-sm font-medium truncate"
+                        title={
+                          transaction.bankName ??
+                          transaction.accountType.replace("-", " ")
+                        }
+                      >
+                        {transaction.bankName ??
+                          transaction.accountType.replace("-", " ")}
+                      </span>
+                      <span
+                        className="text-xs text-muted-foreground truncate"
+                        title={transaction.accountNumber ?? "No account #"}
+                      >
+                        {transaction.accountNumber ?? "No account #"}
+                      </span>
+                      <span
+                        className="text-xs text-muted-foreground truncate"
+                        title={transaction.sourceFileName}
+                      >
+                        {transaction.sourceFileName}
+                      </span>
+                    </div>
+                  </TableCell>
                   </TableRow>
                 ))
               )}

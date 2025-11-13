@@ -19,9 +19,16 @@ export interface ParseSummary {
   warnings: ParseWarning[];
 }
 
+export interface StatementMetadata {
+  accountType: AccountType;
+  bankName: string | null;
+  accountNumber: string | null;
+}
+
 export interface ParseResult {
   transactions: Transaction[];
   warnings: ParseWarning[];
+  metadata: StatementMetadata;
 }
 
 export interface ParseContext {

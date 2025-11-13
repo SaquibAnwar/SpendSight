@@ -81,6 +81,26 @@ const DEPOSIT_CANDIDATES = [
 
 const TYPE_CANDIDATES = ["type", "transaction type", "debit/credit", "dr/cr"];
 
+const ACCOUNT_NUMBER_CANDIDATES = [
+  "account number",
+  "account no",
+  "account no.",
+  "acct no",
+  "acct no.",
+  "acct #",
+  "account #",
+  "account id",
+];
+
+const BANK_NAME_CANDIDATES = [
+  "bank name",
+  "issuing bank",
+  "financial institution",
+  "institution",
+  "bank",
+  "bank branch",
+];
+
 export interface NormalizeOptions {
   fileName: string;
   accountType: AccountType;
@@ -109,6 +129,8 @@ export function normalizeRecord(
 
   const rawDate = normalizedKeys.get("date");
   const rawDescription = normalizedKeys.get("description");
+  const rawAccountNumber = normalizedKeys.get("accountNumber");
+  const rawBankName = normalizedKeys.get("bankName");
 
   if (!rawDate || !rawDescription) {
     const availableColumns = Object.keys(raw).join(", ");
@@ -165,6 +187,8 @@ export function normalizeRecord(
     type,
     accountType: options.accountType,
     sourceFileName: options.fileName,
+    bankName: rawBankName ? String(rawBankName) : null,
+    accountNumber: rawAccountNumber ? String(rawAccountNumber) : null,
     category: null,
     subcategory: null,
     isRecurring: false,
@@ -234,6 +258,19 @@ function mapKeys(raw: Record<string, unknown>) {
       continue;
     }
 
+    if (
+      ACCOUNT_NUMBER_CANDIDATES.includes(normalizedKey) &&
+      !map.has("accountNumber")
+    ) {
+      map.set("accountNumber", value);
+      continue;
+    }
+
+    if (BANK_NAME_CANDIDATES.includes(normalizedKey) && !map.has("bankName")) {
+      map.set("bankName", value);
+      continue;
+    }
+
     // Fallback: fuzzy matching for common patterns
     if (!map.has("date") && normalizedKey.includes("date")) {
       map.set("date", value);
@@ -249,6 +286,26 @@ function mapKeys(raw: Record<string, unknown>) {
         normalizedKey.includes("remark"))
     ) {
       map.set("description", value);
+      continue;
+    }
+
+    if (
+      !map.has("accountNumber") &&
+      (normalizedKey.includes("account number") ||
+        normalizedKey.includes("acct no") ||
+        normalizedKey.includes("account #"))
+    ) {
+      map.set("accountNumber", value);
+      continue;
+    }
+
+    if (
+      !map.has("bankName") &&
+      (normalizedKey.includes("bank name") ||
+        (normalizedKey.includes("bank") &&
+          !normalizedKey.includes("bank statement")))
+    ) {
+      map.set("bankName", value);
       continue;
     }
 

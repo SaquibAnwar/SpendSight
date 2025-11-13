@@ -49,6 +49,39 @@ describe("statement parsing utilities", () => {
     expect(transaction).toBeNull();
     expect(warnings.length).toBeGreaterThan(0);
   });
+
+  it("handles fuzzy column name matching", async () => {
+    const csv = new File(
+      ["Transaction Date,Transaction Details,Withdrawal Amount,Deposit Amount\n2024-01-15,Grocery Store,50.00,\n2024-01-16,Salary Deposit,,2000.00"],
+      "statement.csv",
+      { type: "text/csv" }
+    );
+    const result = await parseStatementFile(csv);
+    expect(result.transactions).toHaveLength(2);
+    expect(result.transactions[0]).toMatchObject({
+      description: "Grocery Store",
+      amount: 50.0,
+      type: "debit",
+      date: "2024-01-15",
+    });
+    expect(result.transactions[1]).toMatchObject({
+      description: "Salary Deposit",
+      amount: 2000.0,
+      type: "credit",
+      date: "2024-01-16",
+    });
+  });
+
+  it("provides helpful error messages with available columns", () => {
+    const { transaction, warnings } = normalizeRecord(
+      { "Unknown Column": "Some value", "Another Column": "Another value" },
+      { fileName: "test.csv", accountType: "bank" }
+    );
+    expect(transaction).toBeNull();
+    expect(warnings.length).toBeGreaterThan(0);
+    expect(warnings[0].message).toContain("Available columns:");
+    expect(warnings[0].message).toContain("Unknown Column");
+  });
 });
 
 

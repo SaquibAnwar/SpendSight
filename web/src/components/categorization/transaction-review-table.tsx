@@ -135,12 +135,14 @@ export function TransactionReviewTable({
       <CardHeader className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Categorisation review</CardTitle>
+            <CardTitle className="text-sm font-semibold">
+              Categorisation review
+            </CardTitle>
             <CardDescription>
               Update categories and confirm new rules before continuing.
             </CardDescription>
           </div>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <Button
               variant={filter === "all" ? "default" : "outline"}
               size="sm"
@@ -321,7 +323,7 @@ function EditableRow({
         {transaction.description}
       </TableCell>
       <TableCell
-        className="text-right text-sm font-medium"
+        className="text-right text-sm font-medium tabular-nums"
         style={{
           width: columnWidths.amount,
           minWidth: columnWidths.amount,
@@ -454,10 +456,10 @@ function ResizableHead({
 }: ResizableHeadProps) {
   const alignmentClass = align === "right" ? "text-right" : "";
   return (
-    <TableHead
-      className={`relative select-none ${alignmentClass}`}
-      style={{ width, minWidth: width, maxWidth: width }}
-    >
+      <TableHead
+        className={`relative select-none ${alignmentClass}`}
+        style={{ width, minWidth: width, maxWidth: width }}
+      >
       <span>{children}</span>
       <span
         role="presentation"

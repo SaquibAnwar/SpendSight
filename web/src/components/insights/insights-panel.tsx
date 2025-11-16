@@ -23,8 +23,10 @@ export function InsightsPanel({
 }: InsightsPanelProps) {
   return (
     <section className="w-full space-y-6">
-      <header className="space-y-2">
-        <h2 className="text-2xl font-semibold">Spend insights</h2>
+      <header className="space-y-1.5">
+        <h2 className="text-[18px] font-semibold leading-6 tracking-tight">
+          Spend insights
+        </h2>
         <p className="text-sm text-muted-foreground">
           Identify subscriptions, repeat patterns, and brand new merchants in the
           current statement batch.
@@ -34,7 +36,9 @@ export function InsightsPanel({
       <div className="flex w-full flex-col gap-6">
         <Card className="h-full w-full">
           <CardHeader>
-            <CardTitle>Recurring expenses</CardTitle>
+            <CardTitle className="text-sm font-semibold">
+              Recurring expenses
+            </CardTitle>
             <CardDescription>
               Subscriptions and frequent spends detected through cadence and
               amount similarity.
@@ -54,7 +58,7 @@ export function InsightsPanel({
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-base font-semibold">
+                        <h3 className="text-sm font-semibold">
                           {expense.merchant}
                         </h3>
                         <p className="text-xs text-muted-foreground">
@@ -85,7 +89,7 @@ export function InsightsPanel({
 
         <Card className="h-full w-full">
           <CardHeader>
-            <CardTitle>New merchants</CardTitle>
+            <CardTitle className="text-sm font-semibold">New merchants</CardTitle>
             <CardDescription>
               One-off spends or first-time merchants that are not part of existing
               rules or recurring patterns.

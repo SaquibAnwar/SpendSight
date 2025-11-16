@@ -29,15 +29,14 @@ import {
   createDebitCreditBreakdown,
 } from "@/lib/visualizations/builders";
 
-const CHART_COLORS = [
-  "#4F46E5",
-  "#0EA5E9",
-  "#F97316",
-  "#22C55E",
-  "#A855F7",
-  "#F43F5E",
-  "#14B8A6",
+// Monochrome-first palette with limited accents, mapped to design tokens so dark mode stays legible.
+const NEUTRAL_SERIES = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
 ];
+const ACCENT_SERIES = ["var(--primary)", "var(--accent)"];
 
 interface VisualizationDashboardProps {
   transactions: Transaction[];
@@ -76,16 +75,18 @@ export function VisualizationDashboard({
   }
 
   return (
-    <section id="visualization-dashboard" className="w-full space-y-4">
-      <header className="space-y-2">
-        <h2 className="text-2xl font-semibold">Visualisations</h2>
+    <section id="visualization-dashboard" className="w-full space-y-5">
+      <header className="space-y-1.5">
+        <h2 className="text-[18px] font-semibold leading-6 tracking-tight">
+          Visualisations
+        </h2>
         <p className="text-sm text-muted-foreground">
           Explore your spend through interactive charts. Export-ready data is
           generated in the background.
         </p>
       </header>
 
-      <Tabs defaultValue="category">
+      <Tabs defaultValue="category" className="flex flex-col gap-3">
         <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="category">Category breakdown</TabsTrigger>
           <TabsTrigger value="daily">Daily spend</TabsTrigger>
@@ -96,9 +97,12 @@ export function VisualizationDashboard({
         </TabsList>
 
         <TabsContent value="category">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <PieChart>
+          <ChartCard
+            title="Category breakdown"
+            subtitle="Monochrome donut with neutral legend for part-to-whole spend."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
                 <Pie
                   data={categoryPieData}
                   dataKey="value"
@@ -106,34 +110,73 @@ export function VisualizationDashboard({
                   innerRadius={70}
                   outerRadius={140}
                   paddingAngle={4}
+                  cornerRadius={6}
+                  stroke="#FFFFFF"
+                  strokeWidth={2}
                 >
                   {categoryPieData.map((entry, index) => (
                     <Cell
                       key={entry.name}
-                      fill={CHART_COLORS[index % CHART_COLORS.length]}
+                      fill={NEUTRAL_SERIES[index % NEUTRAL_SERIES.length]}
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Legend />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Legend
+                  verticalAlign="bottom"
+                  height={32}
+                  wrapperStyle={{ fontSize: 12 }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </ChartCard>
         </TabsContent>
 
         <TabsContent value="daily">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <LineChart data={dailySpendSeries}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Legend />
+          <ChartCard
+            title="Daily spend curve"
+            subtitle="Smoothed line with minimal chrome, showing spend over time."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart
+                data={dailySpendSeries}
+                margin={{ top: 8, right: 12, bottom: 4, left: 0 }}
+              >
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
                 <Line
                   type="monotone"
                   dataKey="spend"
-                  stroke={CHART_COLORS[0]}
+                  stroke={NEUTRAL_SERIES[0]}
                   strokeWidth={2}
                   dot={false}
                 />
@@ -143,48 +186,138 @@ export function VisualizationDashboard({
         </TabsContent>
 
         <TabsContent value="recurring">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <BarChart data={recurringBreakdown}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Bar dataKey="value" fill={CHART_COLORS[1]} radius={8} />
+          <ChartCard
+            title="Recurring vs non‑recurring"
+            subtitle="Simple bar comparison using neutrals and soft gridlines."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <BarChart
+                data={recurringBreakdown}
+                margin={{ top: 8, right: 12, bottom: 4, left: 0 }}
+              >
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Bar
+                  dataKey="value"
+                  fill={NEUTRAL_SERIES[0]}
+                  radius={[6, 6, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
         </TabsContent>
 
         <TabsContent value="merchants">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <BarChart data={topMerchants}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Bar dataKey="value" fill={CHART_COLORS[2]} radius={6} />
+          <ChartCard
+            title="Top merchants"
+            subtitle="Ranked spend by merchant with monochrome bars."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <BarChart
+                data={topMerchants}
+                margin={{ top: 8, right: 12, bottom: 4, left: 0 }}
+              >
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Bar
+                  dataKey="value"
+                  fill={NEUTRAL_SERIES[0]}
+                  radius={[6, 6, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
         </TabsContent>
 
         <TabsContent value="trend">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <LineChart data={categoryTrend.dataset}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Legend />
+          <ChartCard
+            title="Category trend"
+            subtitle="Trend lines per category with one accent hue and neutral companions."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart
+                data={categoryTrend.dataset}
+                margin={{ top: 8, right: 12, bottom: 4, left: 0 }}
+              >
+                <CartesianGrid
+                  stroke="var(--border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
                 {categoryTrend.categories.map((category, index) => (
                   <Line
                     key={category}
                     type="monotone"
                     dataKey={category}
-                    stroke={CHART_COLORS[index % CHART_COLORS.length]}
+                    stroke={
+                      index === 0
+                        ? ACCENT_SERIES[0]
+                        : NEUTRAL_SERIES[(index - 1) % NEUTRAL_SERIES.length]
+                    }
                     strokeWidth={2}
                     dot={false}
                   />
@@ -195,9 +328,12 @@ export function VisualizationDashboard({
         </TabsContent>
 
         <TabsContent value="debitcredit">
-          <ChartCard>
-            <ResponsiveContainer width="100%" height={360}>
-              <PieChart>
+          <ChartCard
+            title="Debits vs credits"
+            subtitle="Two-slice donut emphasizing net direction of cash flow."
+          >
+            <ResponsiveContainer width="100%" height={320}>
+              <PieChart margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
                 <Pie
                   data={debitCreditBreakdown}
                   dataKey="value"
@@ -205,16 +341,30 @@ export function VisualizationDashboard({
                   innerRadius={70}
                   outerRadius={140}
                   paddingAngle={4}
+                  cornerRadius={6}
+                  stroke="#FFFFFF"
+                  strokeWidth={2}
                 >
                   {debitCreditBreakdown.map((entry, index) => (
                     <Cell
                       key={entry.name}
-                      fill={CHART_COLORS[index % CHART_COLORS.length]}
+                      fill={
+                        index === 0
+                          ? "var(--destructive)"
+                          : "var(--primary)"
+                      }
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => value.toFixed(2)} />
-                <Legend />
+                <Tooltip
+                  formatter={(value: number) => value.toFixed(2)}
+                  contentStyle={{
+                    borderRadius: 6,
+                    borderColor: "var(--border)",
+                    fontSize: 12,
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -224,10 +374,30 @@ export function VisualizationDashboard({
   );
 }
 
-function ChartCard({ children }: { children: React.ReactNode }) {
+function ChartCard({
+  children,
+  title,
+  subtitle,
+}: {
+  children: React.ReactNode;
+  title?: string;
+  subtitle?: string;
+}) {
   return (
     <Card className="w-full">
-      <CardContent className="pt-6">{children}</CardContent>
+      <CardContent className="pt-5">
+        {title ? (
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold leading-none">{title}</p>
+              {subtitle ? (
+                <p className="text-xs text-muted-foreground">{subtitle}</p>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+        <div className="h-full w-full">{children}</div>
+      </CardContent>
     </Card>
   );
 }

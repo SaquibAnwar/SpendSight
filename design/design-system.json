@@ -1,0 +1,377 @@
+{
+  "meta": {
+    "name": "SpendSight Design System",
+    "version": "1.0.0",
+    "description": "Authoritative design and implementation guide for SpendSight. This file is intended for AI agents and developers to generate new UI that feels native to the app.",
+    "source_files": [
+      "design.json",
+      "web/src/app",
+      "web/src/components",
+      "web/src/components/ui"
+    ]
+  },
+  "foundations": {
+    "color": {
+      "intent": "Calm, trustworthy financial dashboard with a cool, neutral base and sparing use of color for emphasis.",
+      "primitives": {
+        "background": {
+          "canvas": "#F4F6FB",
+          "subtle": "#EEF1F7",
+          "card": "#FFFFFF",
+          "card_muted": "#F7F9FC"
+        },
+        "border": {
+          "subtle": "#E1E4EC",
+          "strong": "#CBD0DD"
+        },
+        "text": {
+          "primary": "#1F2933",
+          "secondary": "#4B5563",
+          "muted": "#6B7280",
+          "inverted": "#FFFFFF"
+        },
+        "semantic": {
+          "primary": "#10B981",
+          "primary_soft": "#D1FAE5",
+          "primary_border": "#34D399",
+          "accent": "#2563EB",
+          "accent_soft": "#DBEAFE",
+          "accent_border": "#3B82F6",
+          "negative": "#EF4444",
+          "negative_soft": "#FEE2E2",
+          "warning": "#F59E0B",
+          "warning_soft": "#FEF3C7"
+        },
+        "charts": {
+          "bar_primary": "#111827",
+          "bar_secondary": "#9CA3AF",
+          "pie_primary": "#111827",
+          "pie_secondary": "#4B5563",
+          "pie_tertiary": "#9CA3AF"
+        }
+      },
+      "scales": {
+        "neutral": ["#F8FAFC", "#F1F5F9", "#E2E8F0", "#CBD5E1", "#94A3B8", "#64748B", "#475569", "#334155", "#1E293B", "#0F172A", "#020617"],
+        "purple": ["#F5F3FF", "#EDE9FE", "#DDD6FE", "#C4B5FD", "#A855F7", "#9333EA", "#7E22CE", "#6B21A8", "#581C87", "#3B0764", "#2E0249"],
+        "green": ["#ECFDF5", "#D1FAE5", "#A7F3D0", "#6EE7B7", "#34D399", "#10B981", "#059669", "#047857", "#065F46", "#064E3B", "#022C22"],
+        "blue": ["#EFF6FF", "#DBEAFE", "#BFDBFE", "#93C5FD", "#60A5FA", "#3B82F6", "#2563EB", "#1D4ED8", "#1E40AF", "#1E3A8A", "#172554"],
+        "orange": ["#FFF7ED", "#FFEDD5", "#FED7AA", "#FDBA74", "#FB923C", "#F97316", "#EA580C", "#C2410C", "#9A3412", "#7C2D12", "#431407"],
+        "red": ["#FFF1F2", "#FFE4E6", "#FECDD3", "#FDA4AF", "#FB7185", "#F43F5E", "#E11D48", "#BE123C", "#9F1239", "#881337", "#4C0519"]
+      },
+      "tailwind_mapping": {
+        "bg": {
+          "canvas": "bg-slate-50/80 or custom CSS var if configured",
+          "card": "bg-card",
+          "card_muted": "bg-muted"
+        },
+        "text": {
+          "primary": "text-foreground",
+          "muted": "text-muted-foreground"
+        },
+        "border": {
+          "subtle": "border-border",
+          "accent": "border-primary"
+        }
+      },
+      "usage_rules": [
+        "Default to neutral backgrounds and text; use green and blue accents only for key actions, positive states, and primary charts.",
+        "Reserve red and orange for destructive or warning states (errors, risky changes, alerts).",
+        "Charts should be mostly monochrome, with at most one accent hue for emphasis.",
+        "In dark mode, always ensure text or chart strokes have strong contrast (use currentColor plus appropriate Tailwind dark: overrides)."
+      ]
+    },
+    "typography": {
+      "font_family": {
+        "primary": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif",
+        "numeric": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif"
+      },
+      "tokens": {
+        "display.xl": { "size_px": 48, "weight": 700, "line_height_px": 56, "tracking": -0.03, "usage": "Hero headlines, rarely used." },
+        "display.lg": { "size_px": 32, "weight": 600, "line_height_px": 40, "tracking": -0.02, "usage": "Page titles and top-level sections." },
+        "display.md": { "size_px": 24, "weight": 600, "line_height_px": 32, "tracking": -0.01, "usage": "Major card titles / panel titles." },
+        "heading.lg": { "size_px": 20, "weight": 600, "line_height_px": 28, "usage": "Prominent card headings." },
+        "heading.sm": { "size_px": 18, "weight": 600, "line_height_px": 24, "usage": "Standard card titles." },
+        "heading.xs": { "size_px": 14, "weight": 600, "line_height_px": 20, "usage": "Small labels and subheadings." },
+        "body.lg": { "size_px": 16, "weight": 400, "line_height_px": 24, "usage": "Longer copy or more relaxed reading." },
+        "body.md": { "size_px": 14, "weight": 400, "line_height_px": 20, "usage": "Default body copy in cards and tables." },
+        "body.sm": { "size_px": 12, "weight": 400, "line_height_px": 16, "usage": "Helper text and secondary labels." },
+        "body.xs": { "size_px": 11, "weight": 400, "line_height_px": 14, "usage": "Captions and chart axis labels." },
+        "numeric.xl": { "size_px": 36, "weight": 700, "line_height_px": 44, "usage": "Hero dollar values." },
+        "numeric.lg": { "size_px": 28, "weight": 600, "line_height_px": 36, "usage": "Prominent KPIs." },
+        "numeric.md": { "size_px": 18, "weight": 600, "line_height_px": 24, "usage": "Key numbers inside cards and tables." },
+        "numeric.sm": { "size_px": 14, "weight": 500, "line_height_px": 20, "usage": "Secondary metrics." },
+        "label.md": { "size_px": 13, "weight": 500, "line_height_px": 18, "usage": "Form labels and field headings." },
+        "label.sm": { "size_px": 11, "weight": 500, "line_height_px": 14, "transform": "uppercase", "usage": "Overlines (e.g. `PAST MONTH`)." }
+      },
+      "implementation_notes": {
+        "page_titles": "Use `text-2xl md:text-3xl font-semibold tracking-tight`.",
+        "card_title": "Use `text-sm font-semibold` or `text-base font-semibold` depending on prominence.",
+        "muted_copy": "Use `text-sm text-muted-foreground`.",
+        "numeric": "Use `font-semibold tabular-nums` in headings or `font-medium tabular-nums` in tables."
+      },
+      "rules": [
+        "Avoid very large type jumps; keep the visual rhythm tight and data-dense.",
+        "Do not use all caps for long labels; restrict uppercase to tiny overlines.",
+        "Always use tabular-nums for numeric columns in tables and charts."
+      ]
+    },
+    "spacing": {
+      "scale_px": {
+        "1": 4,
+        "2": 8,
+        "3": 12,
+        "4": 16,
+        "5": 20,
+        "6": 24,
+        "7": 32,
+        "8": 40,
+        "9": 48
+      },
+      "usage": {
+        "page_padding": "x: 24px, y: 24px–32px on main content areas.",
+        "card_padding": "20px all around (Tailwind `p-5` or `px-6 py-6` in larger cards).",
+        "card_gap": "20px between cards in a grid (`gap-5`).",
+        "section_gap": "32px+ between major sections (`gap-8`).",
+        "form_field_gap": "16px between fields."
+      }
+    },
+    "radii_and_shadows": {
+      "radii_px": {
+        "none": 0,
+        "sm": 4,
+        "md": 8,
+        "lg": 12,
+        "xl": 16,
+        "pill": 9999
+      },
+      "shadows": {
+        "card_default": "0 4px 12px rgba(15, 23, 42, 0.06)",
+        "card_hover": "0 10px 30px rgba(15, 23, 42, 0.08)"
+      },
+      "implementation": {
+        "card": "Use `rounded-xl border shadow-sm` (radius ~12px).",
+        "button": "Use `rounded-md shadow-xs`.",
+        "badges": "Use `rounded-full`."
+      }
+    },
+    "layout": {
+      "grid": {
+        "max_width_px": 1440,
+        "columns": 12,
+        "gutter_px": 24,
+        "outer_margin_px": 24
+      },
+      "app_shell": {
+        "structure": "Top header bar + centered content.",
+        "header": {
+          "height_px": 56,
+          "classes": "border-b bg-background/80 backdrop-blur",
+          "content_width": "max-w-5xl mx-auto px-6"
+        },
+        "content": {
+          "classes": "max-w-5xl mx-auto px-6 py-8 flex flex-col gap-6",
+          "behavior": "Use stacked cards inside a responsive grid (1–3 columns depending on width)."
+        }
+      }
+    }
+  },
+  "components": {
+    "button": {
+      "file": "web/src/components/ui/button.tsx",
+      "variants": {
+        "primary": {
+          "class": "bg-primary text-primary-foreground hover:bg-primary/90",
+          "usage": "Main actions like `Export`, `Continue`, `Upload`."
+        },
+        "secondary": {
+          "class": "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "usage": "Supporting actions, e.g. `Cancel` alongside a primary button."
+        },
+        "outline": {
+          "class": "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+          "usage": "Low-emphasis actions that still need clear affordance."
+        },
+        "ghost": {
+          "class": "hover:bg-accent hover:text-accent-foreground",
+          "usage": "Toolbar actions and inline text buttons."
+        },
+        "link": {
+          "class": "text-primary underline-offset-4 hover:underline",
+          "usage": "Deep-link style actions inside copy."
+        }
+      },
+      "sizes": {
+        "sm": "h-8 px-3 text-xs/3.5",
+        "md": "h-9 px-4 text-sm",
+        "lg": "h-10 px-6 text-sm"
+      },
+      "rules": [
+        "Limit each view to one primary button where possible.",
+        "Use `ghost` or `outline` for secondary actions to keep the UI calm."
+      ]
+    },
+    "card": {
+      "file": "web/src/components/ui/card.tsx",
+      "parts": {
+        "root": "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "header": "grid auto-rows-min grid-rows-[auto_auto] gap-2 px-6",
+        "title": "font-semibold leading-none",
+        "description": "text-sm text-muted-foreground",
+        "content": "px-6",
+        "footer": "flex items-center px-6 pt-6 border-t"
+      },
+      "usage": [
+        "Use cards for almost all dashboard content blocks (metrics, charts, tables).",
+        "Avoid nested heavy borders inside cards; rely on spacing and subtle dividers instead."
+      ]
+    },
+    "badge": {
+      "file": "web/src/components/ui/badge.tsx",
+      "variants": {
+        "default": "border-transparent bg-primary text-primary-foreground",
+        "secondary": "border-transparent bg-secondary text-secondary-foreground",
+        "destructive": "border-transparent bg-destructive text-white",
+        "outline": "text-foreground border"
+      },
+      "usage": [
+        "Use for statuses (`Active`, `Paused`), durations (`Last 3 Months`), and small metadata.",
+        "Do not overuse badges; they should highlight just a few key qualifiers."
+      ]
+    },
+    "form_controls": {
+      "input": {
+        "file": "web/src/components/ui/input.tsx",
+        "class": "h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+      },
+      "textarea": {
+        "file": "web/src/components/ui/textarea.tsx",
+        "class": "min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+      },
+      "switch": {
+        "file": "web/src/components/ui/switch.tsx",
+        "class": "inline-flex h-[1.15rem] w-8 items-center rounded-full bg-input data-[state=checked]:bg-primary"
+      },
+      "rules": [
+        "Labels should be left-aligned above the field (`text-sm font-medium text-foreground`).",
+        "Helper text goes directly below fields in `text-xs text-muted-foreground`."
+      ]
+    },
+    "navigation": {
+      "header": {
+        "layout": "Top navigation bar as implemented in `web/src/app/layout.tsx`.",
+        "class": "border-b bg-background/80 backdrop-blur",
+        "content": "Logo at left, nav links center/right, theme toggle at far right."
+      },
+      "links": {
+        "default": "text-sm text-muted-foreground hover:text-foreground",
+        "active": "text-sm font-medium text-foreground"
+      }
+    },
+    "feedback": {
+      "alert": {
+        "file": "web/src/components/ui/alert.tsx",
+        "variants": {
+          "default": "bg-card text-card-foreground border",
+          "destructive": "bg-card text-destructive border border-destructive/40"
+        },
+        "usage": [
+          "Place alerts at the top of the relevant card or page.",
+          "Keep copy concise: one short title + one sentence of description."
+        ]
+      },
+      "dialog": {
+        "file": "web/src/components/ui/dialog.tsx",
+        "content_class": "bg-background rounded-lg border p-6 shadow-lg max-w-lg w-full",
+        "usage": [
+          "Use dialogs for irreversible actions or short workflows (e.g. export confirmations).",
+          "Do not open multiple dialogs at once."
+        ]
+      }
+    },
+    "data_display": {
+      "table": {
+        "file": "web/src/components/ui/table.tsx",
+        "row_class": "border-b hover:bg-muted/50",
+        "header_cell_class": "h-10 px-2 text-left text-sm font-medium text-foreground",
+        "cell_class": "p-2 text-sm align-middle whitespace-nowrap",
+        "usage": [
+          "Left-align labels, right-align numeric values.",
+          "Keep tables visually simple with minimal stripes; use hover state and spacing to guide the eye."
+        ]
+      },
+      "tabs": {
+        "file": "web/src/components/ui/tabs.tsx",
+        "root_class": "flex flex-col gap-2",
+        "list_class": "inline-flex h-9 items-center rounded-lg bg-muted p-0.5",
+        "trigger_class": "inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center rounded-md px-2 text-sm font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm",
+        "usage": [
+          "Use tabs to switch between high-level dashboard views (Overview, Cash flow, Categories).",
+          "Keep tab labels short (1–2 words)."
+        ]
+      }
+    },
+    "charts": {
+      "bar_chart": {
+        "style": {
+          "bars": "Use currentColor with classes like `text-slate-900 dark:text-slate-100`.",
+          "shape": "Rounded top corners, no outlines.",
+          "grid": "Thin horizontal gridline at 0 baseline; no heavy grid."
+        },
+        "usage": [
+          "Use for monthly or categorical comparisons.",
+          "Label the x-axis categories with tiny text (`text-[10px] text-muted-foreground`)."
+        ]
+      },
+      "donut_chart": {
+        "style": {
+          "segments": "Use concentric segments with decreasing stroke opacity for secondary slices.",
+          "center": "Show total or primary metric in `text-lg font-semibold tabular-nums`."
+        },
+        "usage": [
+          "Use for part-to-whole breakdowns (categories, allocation).",
+          "Limit segments to 3–5; group the rest into `Other`."
+        ]
+      },
+      "line_chart": {
+        "style": {
+          "line": "2px stroke in `text-slate-900 dark:text-slate-100`.",
+          "area": "Optional gradient fill using currentColor at ~10–20% opacity.",
+          "sparklines": "1.5px stroke, no axes, tiny height (~24px)."
+        },
+        "usage": [
+          "Use for trends over time (balances, spend curves).",
+          "Avoid over-annotating; show detailed values in tooltips or nearby text."
+        ]
+      }
+    }
+  },
+  "high_level_guidelines": {
+    "tone": [
+      "Professional, calm, and trustworthy — like a modern banking or financial analytics tool.",
+      "Visual weight should fall on data and key actions, not chrome or decoration."
+    ],
+    "layout": [
+      "Always preserve generous outer margins; avoid edge-to-edge content.",
+      "Prefer a grid of cards; each card should represent a coherent concept (a metric, a set of related metrics, or a table).",
+      "On wide screens, aim for 2–3 columns of cards; on small screens, stack cards vertically."
+    ],
+    "interaction": [
+      "Hover states should be subtle: slight elevation, soft background tint, or border emphasis — no large color jumps.",
+      "Focus states must be clearly visible and meet accessibility contrast, typically via `ring-ring/50` and border color.",
+      "Animations (if any) should be soft fades or slides, never flashy or bouncy."
+    ],
+    "accessibility": [
+      "Maintain sufficient color contrast for all text and key lines/shapes in charts in both light and dark modes.",
+      "Do not encode meaning with color alone; pair with labels, icons, or patterns when possible.",
+      "Ensure interactive elements have clear focus states and adequate hit targets (at least 40px tall)."
+    ],
+    "ai_instructions": [
+      "When generating new UI, reuse existing components from `web/src/components/ui` wherever possible instead of creating custom primitives.",
+      "Follow the spacing, typography, and color rules in this file; do not introduce arbitrary new scales or colors.",
+      "New features should fit into the card-based dashboard structure and feel like an extension of the existing `/` and `/design-system` pages.",
+      "Favor clarity and information density over decoration; every visual element should support understanding of spend, trends, or navigation."
+    ]
+  }
+}
+
+

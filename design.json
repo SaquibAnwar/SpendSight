@@ -215,12 +215,19 @@
       "usage": "Use the same geometric sans-serif for body and numerics to maintain a clean, modern aesthetic. Ensure tabular numbers are used in key financial tables if supported."
     },
     "scale": {
+      "display.xl": {
+        "size": 48,
+        "weight": 700,
+        "line_height": 56,
+        "letter_spacing": -0.03,
+        "usage": "Hero headlines, major section titles (rare use)."
+      },
       "display.lg": {
         "size": 32,
         "weight": 600,
         "line_height": 40,
         "letter_spacing": -0.02,
-        "usage": "Rare. Top-level page title when needed."
+        "usage": "Top-level page title when needed."
       },
       "display.md": {
         "size": 24,
@@ -228,6 +235,13 @@
         "line_height": 32,
         "letter_spacing": -0.01,
         "usage": "Panel headers or hero metrics titles."
+      },
+      "heading.lg": {
+        "size": 20,
+        "weight": 600,
+        "line_height": 28,
+        "letter_spacing": -0.005,
+        "usage": "Major card headers and section dividers."
       },
       "heading.sm": {
         "size": 18,
@@ -241,6 +255,12 @@
         "line_height": 20,
         "usage": "Small labels within cards (e.g., metric labels, sub-section headings)."
       },
+      "body.lg": {
+        "size": 16,
+        "weight": 400,
+        "line_height": 24,
+        "usage": "Larger body text for emphasis or readability."
+      },
       "body.md": {
         "size": 14,
         "weight": 400,
@@ -252,6 +272,18 @@
         "weight": 400,
         "line_height": 16,
         "usage": "Secondary copy, helper text, data labels."
+      },
+      "body.xs": {
+        "size": 11,
+        "weight": 400,
+        "line_height": 14,
+        "usage": "Tiny labels, captions, chart axis labels."
+      },
+      "numeric.xl": {
+        "size": 36,
+        "weight": 700,
+        "line_height": 44,
+        "usage": "Extra large financial hero numbers."
       },
       "numeric.lg": {
         "size": 28,
@@ -270,14 +302,170 @@
         "weight": 500,
         "line_height": 20,
         "usage": "Secondary metrics and table values."
+      },
+      "label.md": {
+        "size": 13,
+        "weight": 500,
+        "line_height": 18,
+        "letter_spacing": 0.01,
+        "usage": "Form labels, input labels."
+      },
+      "label.sm": {
+        "size": 11,
+        "weight": 500,
+        "line_height": 14,
+        "letter_spacing": 0.02,
+        "text_transform": "uppercase",
+        "usage": "Overline labels, category tags."
       }
     },
     "guidelines": [
-      "Use stronger weights (600) for titles and key metrics; keep the rest of the interface at regular weight for a calm, professional feel.",
+      "Use stronger weights (600–700) for titles and key metrics; keep the rest of the interface at regular weight for a calm, professional feel.",
       "Do not use overly large display sizes on this dashboard; keep type compact and information-dense while preserving readability.",
       "Maintain consistent letter spacing and line heights to avoid a cramped appearance.",
-      "Prefer sentence case for navigation and labels instead of all caps."
+      "Prefer sentence case for navigation and labels instead of all caps, except for tiny overline labels.",
+      "Use tabular-nums font feature for financial tables and numeric columns to ensure alignment."
     ]
+  },
+  "charts_and_graphs": {
+    "description": "Guidelines for data visualization components including bar charts, line charts, pie/donut charts, and color palettes for data series.",
+    "general_principles": [
+      "Prioritize clarity: charts should communicate insights at a glance without clutter.",
+      "Use minimal gridlines and axis decoration; let the data speak.",
+      "Default to monochrome or neutral palettes, introducing accent colors only for emphasis.",
+      "Maintain consistent spacing and padding within chart containers.",
+      "Ensure all text labels are legible using body.xs or body.sm typography tokens."
+    ],
+    "bar_chart": {
+      "description": "Vertical or horizontal bar charts for comparing discrete categories or time-series data.",
+      "bar_style": {
+        "fill_color_primary": "color.neutral.900",
+        "fill_color_secondary": "color.neutral.400",
+        "fill_color_accent": "color.blue.600",
+        "border_radius": "radius.sm on top corners only",
+        "bar_width": "Auto-calculated with 40–60% category width, maintaining spacing.2 gap between bars.",
+        "hover_style": "Slightly darken fill or add subtle shadow."
+      },
+      "axis": {
+        "x_axis": {
+          "line_color": "color.border.subtle",
+          "label_typography": "body.xs",
+          "label_color": "color.text.muted",
+          "tick_length": 4
+        },
+        "y_axis": {
+          "line_color": "color.border.subtle",
+          "label_typography": "body.xs",
+          "label_color": "color.text.muted",
+          "gridlines": "Horizontal only, using color.border.subtle with reduced opacity (0.5)."
+        }
+      },
+      "legend": {
+        "position": "top-right or bottom",
+        "typography": "body.sm",
+        "color_indicator": "Small square or circle (8×8px) matching bar color.",
+        "spacing": "spacing.3 between legend items."
+      }
+    },
+    "line_chart": {
+      "description": "Line charts for showing trends over time or continuous data.",
+      "line_style": {
+        "stroke_width": 2,
+        "stroke_color_primary": "color.neutral.900",
+        "stroke_color_secondary": "color.blue.600",
+        "stroke_color_tertiary": "color.purple.500",
+        "curve": "smooth (catmull-rom or monotone)",
+        "data_points": {
+          "show": "On hover or for key milestones only",
+          "radius": 4,
+          "fill": "Match line color",
+          "stroke": "color.background.card (2px) for contrast"
+        }
+      },
+      "area_fill": {
+        "enabled": "Optional for emphasis",
+        "fill_color": "Gradient from line color at 20% opacity to transparent",
+        "usage": "Use sparingly to highlight primary series."
+      },
+      "axis": {
+        "x_axis": {
+          "line_color": "color.border.subtle",
+          "label_typography": "body.xs",
+          "label_color": "color.text.muted"
+        },
+        "y_axis": {
+          "line_color": "color.border.subtle",
+          "label_typography": "body.xs",
+          "label_color": "color.text.muted",
+          "gridlines": "Horizontal, color.border.subtle at 50% opacity."
+        }
+      }
+    },
+    "pie_donut_chart": {
+      "description": "Pie or donut charts for showing part-to-whole relationships.",
+      "segment_style": {
+        "colors": [
+          "color.neutral.900",
+          "color.neutral.600",
+          "color.neutral.400",
+          "color.neutral.200"
+        ],
+        "stroke": "color.background.card (2px) to separate segments",
+        "hover_style": "Slightly scale segment outward or increase brightness."
+      },
+      "donut_hole": {
+        "enabled": true,
+        "inner_radius": "60% of outer radius",
+        "center_content": "Optional: display total value or key metric in numeric.lg style."
+      },
+      "legend": {
+        "position": "right-aligned or below chart",
+        "typography": "body.sm",
+        "layout": "Vertical list with color indicator (circle, 8px) and label with percentage."
+      }
+    },
+    "color_palette_for_data": {
+      "description": "Recommended color sequences for multi-series charts.",
+      "monochrome_sequence": [
+        "color.neutral.900",
+        "color.neutral.700",
+        "color.neutral.500",
+        "color.neutral.300"
+      ],
+      "blue_sequence": [
+        "color.blue.700",
+        "color.blue.500",
+        "color.blue.300",
+        "color.blue.100"
+      ],
+      "categorical_palette": [
+        "color.neutral.900",
+        "color.blue.600",
+        "color.purple.500",
+        "color.green.600",
+        "color.orange.500",
+        "color.red.500"
+      ],
+      "usage": "Default to monochrome for single-category data. Use categorical palette only when distinguishing multiple unrelated series."
+    },
+    "sparklines": {
+      "description": "Tiny inline charts for showing trends in compact spaces (e.g., table cells).",
+      "height": 24,
+      "stroke_width": 1.5,
+      "stroke_color": "color.primary or color.neutral.700",
+      "background": "transparent",
+      "usage": "No axes or labels; purely visual trend indicator."
+    },
+    "tooltips": {
+      "description": "Hover tooltips for displaying detailed data points.",
+      "background_color": "color.neutral.900",
+      "text_color": "color.text.inverted",
+      "typography": "body.sm",
+      "padding": "spacing.2",
+      "border_radius": "radius.sm",
+      "shadow": "elevation.2",
+      "content": "Show data label, value, and optional context (e.g., date, percentage)."
+    }
   },
   "components": {
     "app_shell": {

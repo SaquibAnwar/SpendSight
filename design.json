@@ -1,0 +1,532 @@
+{
+  "meta": {
+    "name": "SpendSight Dashboard Design Language",
+    "version": "1.0.0",
+    "description": "High-level design and style guidelines derived from a modern financial analytics dashboard. This file is intended to guide AI-generated UI so that new screens visually match the reference layout and style.",
+    "design_goals": [
+      "Feel like a professional financial institution dashboard: trustworthy, calm, and data-focused.",
+      "Use clean, minimal surfaces with clear hierarchy and plenty of whitespace.",
+      "Prioritize readability of numbers, trends, and time-series data.",
+      "Keep the interface neutral and cool, with subtle use of color for emphasis rather than decoration."
+    ]
+  },
+  "layout": {
+    "grid": {
+      "page_max_width": 1440,
+      "column_count": 12,
+      "gutter": 24,
+      "outer_margin": 24,
+      "behavior": "Use a centered, fixed-width content area inside the viewport. Align cards and charts to an implicit 12-column grid. Do not stretch content edge-to-edge; always preserve generous outer margins."
+    },
+    "app_shell": {
+      "structure": "Three main zones: left vertical sidebar, main content grid, and top-level browser chrome simulated by the mockup.",
+      "background_color_token": "color.background.canvas",
+      "content_background_color_token": "color.background.subtle",
+      "max_page_width_behavior": "Center the dashboard content area while the sidebar remains flush with the left edge.",
+      "scrolling_behavior": "Sidebar is fixed; main content scrolls vertically under the top header area if present."
+    },
+    "sidebar": {
+      "width": 240,
+      "background_color_token": "color.background.sidebar",
+      "border": "Right-hand subtle divider line using color.border.subtle.",
+      "padding": {
+        "x": "spacing.4",
+        "y": "spacing.5"
+      },
+      "sections": [
+        "Logo and app name at the top with generous padding.",
+        "Search field under logo, full width.",
+        "Primary navigation section (Performance, Financial Ventures, etc.) with vertical list of items.",
+        "Secondary navigation or utility items grouped lower.",
+        "User profile/footer block at the very bottom with avatar, name, and email."
+      ],
+      "nav_item": {
+        "height": 40,
+        "padding_x": "spacing.3",
+        "icon_alignment": "Icon on left, label next, optional right-aligned pill or chevron.",
+        "inactive_style": "Neutral text color (color.text.muted) on transparent background. Icon in color.icon.muted.",
+        "active_style": "White or near-white background, subtle rounded rectangle or pill, accent-colored left stripe or dot, label in color.text.primary with medium weight.",
+        "hover_style": "Slightly darker background than sidebar, maintain same spacing and alignment."
+      }
+    },
+    "content": {
+      "top_spacing": "spacing.6",
+      "card_gap": "spacing.5",
+      "section_gap": "spacing.7",
+      "behavior": "Compose the dashboard from multiple cards arranged in a 12-column grid. Cards should align to rows and maintain consistent vertical rhythm."
+    }
+  },
+  "spacing": {
+    "scale": {
+      "spacing.1": 4,
+      "spacing.2": 8,
+      "spacing.3": 12,
+      "spacing.4": 16,
+      "spacing.5": 20,
+      "spacing.6": 24,
+      "spacing.7": 32,
+      "spacing.8": 40,
+      "spacing.9": 48
+    },
+    "usage": {
+      "card_inner_padding": "Use spacing.5 (20px) on all sides for standard cards. For dense summaries, allow spacing.4 on secondary rows.",
+      "between_cards": "Use spacing.5 horizontally and vertically.",
+      "between_sections": "Use spacing.7 or greater to visually separate logical groups of cards.",
+      "form_field_gap": "Use spacing.4 between label and input, spacing.4–spacing.5 between stacked fields.",
+      "table_row_padding": "Vertical padding equivalent to spacing.3 inside table rows."
+    }
+  },
+  "radii": {
+    "scale": {
+      "radius.none": 0,
+      "radius.sm": 4,
+      "radius.md": 8,
+      "radius.lg": 12,
+      "radius.xl": 16,
+      "radius.pill": 9999
+    },
+    "usage": {
+      "card": "Use radius.lg for card corners.",
+      "button": "Use radius.md for standard buttons, radius.pill for pills and badges.",
+      "input": "Use radius.md for inputs and search fields.",
+      "chart_container": "Match the hosting card radius for consistency."
+    }
+  },
+  "shadows": {
+    "elevation.0": "none",
+    "elevation.1": "0 4px 12px rgba(15, 23, 42, 0.06)",
+    "elevation.2": "0 10px 30px rgba(15, 23, 42, 0.08)",
+    "usage": {
+      "card": "Default to elevation.1 to subtly lift cards from the canvas.",
+      "hovered_card": "Optionally increase to elevation.2 with a slight scale-up for emphasis.",
+      "floating_elements": "Use elevation.2 for modals or floating panels when introduced."
+    }
+  },
+  "colors": {
+    "palette": {
+      "color.background.canvas": "#F4F6FB",
+      "color.background.subtle": "#EEF1F7",
+      "color.background.sidebar": "#FFFFFF",
+      "color.background.card": "#FFFFFF",
+      "color.background.card_muted": "#F7F9FC",
+      "color.border.subtle": "#E1E4EC",
+      "color.border.strong": "#CBD0DD",
+      "color.text.primary": "#1F2933",
+      "color.text.secondary": "#4B5563",
+      "color.text.muted": "#6B7280",
+      "color.text.inverted": "#FFFFFF",
+      "color.primary": "#10B981",
+      "color.primary.soft": "#D1FAE5",
+      "color.primary.border": "#34D399",
+      "color.accent": "#2563EB",
+      "color.accent.soft": "#DBEAFE",
+      "color.accent.border": "#3B82F6",
+      "color.negative": "#EF4444",
+      "color.negative.soft": "#FEE2E2",
+      "color.warning": "#F59E0B",
+      "color.warning.soft": "#FEF3C7",
+      "color.neutral.50": "#F8FAFC",
+      "color.neutral.100": "#F1F5F9",
+      "color.neutral.200": "#E2E8F0",
+      "color.neutral.300": "#CBD5E1",
+      "color.neutral.400": "#94A3B8",
+      "color.neutral.500": "#64748B",
+      "color.neutral.600": "#475569",
+      "color.neutral.700": "#334155",
+      "color.neutral.800": "#1E293B",
+      "color.neutral.900": "#0F172A",
+      "color.neutral.950": "#020617",
+      "color.purple.50": "#F5F3FF",
+      "color.purple.100": "#EDE9FE",
+      "color.purple.200": "#DDD6FE",
+      "color.purple.300": "#C4B5FD",
+      "color.purple.400": "#A855F7",
+      "color.purple.500": "#9333EA",
+      "color.purple.600": "#7E22CE",
+      "color.purple.700": "#6B21A8",
+      "color.purple.800": "#581C87",
+      "color.purple.900": "#3B0764",
+      "color.purple.950": "#2E0249",
+      "color.green.50": "#ECFDF5",
+      "color.green.100": "#D1FAE5",
+      "color.green.200": "#A7F3D0",
+      "color.green.300": "#6EE7B7",
+      "color.green.400": "#34D399",
+      "color.green.500": "#10B981",
+      "color.green.600": "#059669",
+      "color.green.700": "#047857",
+      "color.green.800": "#065F46",
+      "color.green.900": "#064E3B",
+      "color.green.950": "#022C22",
+      "color.blue.50": "#EFF6FF",
+      "color.blue.100": "#DBEAFE",
+      "color.blue.200": "#BFDBFE",
+      "color.blue.300": "#93C5FD",
+      "color.blue.400": "#60A5FA",
+      "color.blue.500": "#3B82F6",
+      "color.blue.600": "#2563EB",
+      "color.blue.700": "#1D4ED8",
+      "color.blue.800": "#1E40AF",
+      "color.blue.900": "#1E3A8A",
+      "color.blue.950": "#172554",
+      "color.orange.50": "#FFF7ED",
+      "color.orange.100": "#FFEDD5",
+      "color.orange.200": "#FED7AA",
+      "color.orange.300": "#FDBA74",
+      "color.orange.400": "#FB923C",
+      "color.orange.500": "#F97316",
+      "color.orange.600": "#EA580C",
+      "color.orange.700": "#C2410C",
+      "color.orange.800": "#9A3412",
+      "color.orange.900": "#7C2D12",
+      "color.orange.950": "#431407",
+      "color.red.50": "#FFF1F2",
+      "color.red.100": "#FFE4E6",
+      "color.red.200": "#FECDD3",
+      "color.red.300": "#FDA4AF",
+      "color.red.400": "#FB7185",
+      "color.red.500": "#F43F5E",
+      "color.red.600": "#E11D48",
+      "color.red.700": "#BE123C",
+      "color.red.800": "#9F1239",
+      "color.red.900": "#881337",
+      "color.red.950": "#4C0519",
+      "color.chart.bar_primary": "#111827",
+      "color.chart.bar_secondary": "#9CA3AF",
+      "color.chart.pie_primary": "#111827",
+      "color.chart.pie_secondary": "#4B5563",
+      "color.chart.pie_tertiary": "#9CA3AF",
+      "color.shadow.soft": "rgba(15, 23, 42, 0.06)"
+    },
+    "guidelines": [
+      "Use the canvas and subtle background colors to create a soft, low-contrast frame around white cards.",
+      "Reserve the primary green (color.green.500) for success states, key numbers, active navigation, and positive trend indicators.",
+      "Use the blue scale (color.blue.*) for CTAs, key links, or highlighted modules.",
+      "Use purple tones sparingly for secondary emphasis, tags, or comparison series in charts.",
+      "Use orange and red scales for caution and error states respectively, limiting their use to status indicators and alerts.",
+      "Text should predominantly use neutral scale values (color.neutral.700 and below), with muted text for helper copy and labels.",
+      "Charts should be mostly monochrome (neutral scale) with one or two accent hues from blue, green, or purple for emphasis rather than a rainbow palette."
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "primary": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif",
+      "numeric": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif",
+      "usage": "Use the same geometric sans-serif for body and numerics to maintain a clean, modern aesthetic. Ensure tabular numbers are used in key financial tables if supported."
+    },
+    "scale": {
+      "display.lg": {
+        "size": 32,
+        "weight": 600,
+        "line_height": 40,
+        "letter_spacing": -0.02,
+        "usage": "Rare. Top-level page title when needed."
+      },
+      "display.md": {
+        "size": 24,
+        "weight": 600,
+        "line_height": 32,
+        "letter_spacing": -0.01,
+        "usage": "Panel headers or hero metrics titles."
+      },
+      "heading.sm": {
+        "size": 18,
+        "weight": 600,
+        "line_height": 24,
+        "usage": "Card titles and section headers."
+      },
+      "heading.xs": {
+        "size": 14,
+        "weight": 600,
+        "line_height": 20,
+        "usage": "Small labels within cards (e.g., metric labels, sub-section headings)."
+      },
+      "body.md": {
+        "size": 14,
+        "weight": 400,
+        "line_height": 20,
+        "usage": "Primary body copy in cards and labels."
+      },
+      "body.sm": {
+        "size": 12,
+        "weight": 400,
+        "line_height": 16,
+        "usage": "Secondary copy, helper text, data labels."
+      },
+      "numeric.lg": {
+        "size": 28,
+        "weight": 600,
+        "line_height": 36,
+        "usage": "Hero financial numbers (e.g., $50,000 USD)."
+      },
+      "numeric.md": {
+        "size": 18,
+        "weight": 600,
+        "line_height": 24,
+        "usage": "Key metrics within cards (e.g., percentages, dollar amounts)."
+      },
+      "numeric.sm": {
+        "size": 14,
+        "weight": 500,
+        "line_height": 20,
+        "usage": "Secondary metrics and table values."
+      }
+    },
+    "guidelines": [
+      "Use stronger weights (600) for titles and key metrics; keep the rest of the interface at regular weight for a calm, professional feel.",
+      "Do not use overly large display sizes on this dashboard; keep type compact and information-dense while preserving readability.",
+      "Maintain consistent letter spacing and line heights to avoid a cramped appearance.",
+      "Prefer sentence case for navigation and labels instead of all caps."
+    ]
+  },
+  "components": {
+    "app_shell": {
+      "description": "The main container that holds sidebar, header (if used), and content grid.",
+      "layout": "Sidebar fixed to the left, content area to the right with a light canvas background. Content is centered with maximum width and equal outer margins.",
+      "spacing_tokens": {
+        "outer_margin": "spacing.6",
+        "top_margin": "spacing.6"
+      }
+    },
+    "sidebar": {
+      "description": "Vertical navigation with logo, search, nav items, utility links, and user profile.",
+      "background_color_token": "color.background.sidebar",
+      "divider_color_token": "color.border.subtle",
+      "active_indicator": {
+        "type": "left_strip",
+        "width": 3,
+        "color_token": "color.primary"
+      },
+      "search": {
+        "height": 36,
+        "border_radius_token": "radius.md",
+        "background_color_token": "color.background.card_muted",
+        "icon_position": "left",
+        "placeholder_style": "body.sm with color.text.muted"
+      }
+    },
+    "top_nav": {
+      "description": "Optional horizontal header bar that can host breadcrumbs, date range selectors, and global actions.",
+      "height": 56,
+      "background": "Transparent over canvas or subtle gradient; keep minimal.",
+      "alignment": "Left-aligned title, right-aligned actions such as profile icon or notifications."
+    },
+    "card": {
+      "description": "Primary surface for grouped content such as metrics, charts, and summaries.",
+      "background_color_token": "color.background.card",
+      "border_radius_token": "radius.lg",
+      "shadow_token": "elevation.1",
+      "padding": {
+        "x": "spacing.5",
+        "y": "spacing.5"
+      },
+      "header": {
+        "layout": "Title on left, optional actions (date range dropdown, menu icon) on right.",
+        "title_typography_token": "heading.sm",
+        "subtitle_typography_token": "body.sm",
+        "spacing_below": "spacing.4"
+      },
+      "body": {
+        "layout": "Flexible. Use consistent vertical rhythm and align numbers and labels on a common baseline.",
+        "spacing_between_rows": "spacing.3"
+      }
+    },
+    "profile_summary_card": {
+      "description": "Card with user avatar, name, role, and short description.",
+      "layout": "Avatar on the left, with name and role stacked to the right. Below, a paragraph of copy describing the user.",
+      "avatar": {
+        "shape": "circle",
+        "size": 56,
+        "background": "Soft neutral tone or illustration."
+      },
+      "typography": {
+        "name": "heading.sm",
+        "role": "body.sm",
+        "description": "body.sm with color.text.muted"
+      }
+    },
+    "stat_summary_card": {
+      "description": "Compact cards showing short descriptive text and key financial metrics.",
+      "layout": "Title at top, short descriptive paragraph, key numeric value aligned at bottom or right side.",
+      "typography": {
+        "title": "heading.xs",
+        "description": "body.sm",
+        "metric": "numeric.md"
+      },
+      "interaction": "Static or with subtle hover elevation increase."
+    },
+    "investment_summary_card": {
+      "description": "Complex card displaying headline figure, category selector, and supporting table/list.",
+      "sections": [
+        "Top row: card title and optional chip indicating state (e.g., 'Desired duration').",
+        "Hero numeric: large dollar value in numeric.lg style.",
+        "Control row: dropdown for category selection, summary badges for options like 'Available cash assets'.",
+        "Data list or table: rows with category name, amount, and time indication."
+      ],
+      "controls": {
+        "dropdown_style": "bordered subtle input with chevron, radius.md, neutral background.",
+        "chips": "Pill-shaped, soft border, subtle background using accent or neutral soft colors."
+      }
+    },
+    "chart_card": {
+      "description": "Card containing bar charts or pie/donut charts with minimal chrome.",
+      "layout": "Header with title and date range selector, body with chart, footer with short legend or summary.",
+      "chart_area": {
+        "background": "Transparent over card background.",
+        "axis_style": "Minimal axis lines using color.border.subtle and small labels in body.sm.",
+        "bar_style": "Solid bars in dark monochrome (color.chart.bar_primary) with rounded top corners.",
+        "pie_style": "Donut segments with dark, mid, and light neutrals; slight separation between segments."
+      },
+      "legend": {
+        "layout": "Right-aligned descriptions with colored bullets or small squares matching chart colors.",
+        "typography_token": "body.sm"
+      }
+    },
+    "data_table": {
+      "description": "Simple, clean table for financial breakdowns.",
+      "header": {
+        "background_color_token": "color.background.card_muted",
+        "typography_token": "body.sm",
+        "text_color_token": "color.text.secondary"
+      },
+      "row": {
+        "padding_y": "spacing.3",
+        "border_bottom_color_token": "color.border.subtle",
+        "hover_background_token": "color.background.card_muted"
+      },
+      "cell": {
+        "primary_text_token": "body.md",
+        "secondary_text_token": "body.sm",
+        "alignment": "Use left alignment for labels and right alignment for numeric values."
+      }
+    },
+    "button": {
+      "description": "Used sparingly; primary actions like 'View Full Report'.",
+      "sizes": {
+        "sm": {
+          "height": 32,
+          "padding_x": "spacing.3",
+          "font_token": "body.sm"
+        },
+        "md": {
+          "height": 40,
+          "padding_x": "spacing.4",
+          "font_token": "body.md"
+        }
+      },
+      "variants": {
+        "primary": {
+          "background_color_token": "color.accent",
+          "text_color_token": "color.text.inverted",
+          "border_radius_token": "radius.md",
+          "hover": "Darken the background slightly and increase shadow subtly."
+        },
+        "secondary": {
+          "background_color_token": "color.background.card",
+          "text_color_token": "color.accent",
+          "border_color_token": "color.accent.border",
+          "border_radius_token": "radius.md"
+        },
+        "ghost": {
+          "background_color_token": "transparent",
+          "text_color_token": "color.text.secondary",
+          "hover_background_color_token": "color.background.card_muted"
+        }
+      }
+    },
+    "badge": {
+      "description": "Small pill-style labels used for statuses, durations, and category chips.",
+      "shape": "radius.pill",
+      "padding_x": "spacing.3",
+      "padding_y": "spacing.1",
+      "typography_token": "body.sm",
+      "variants": {
+        "neutral": {
+          "background_color_token": "color.neutral.100",
+          "text_color_token": "color.text.secondary",
+          "border_color_token": "color.border.subtle"
+        },
+        "accent": {
+          "background_color_token": "color.accent.soft",
+          "text_color_token": "color.accent",
+          "border_color_token": "color.accent.border"
+        },
+        "success": {
+          "background_color_token": "color.primary.soft",
+          "text_color_token": "color.primary",
+          "border_color_token": "color.primary.border"
+        }
+      }
+    },
+    "input": {
+      "description": "Base form input style used for search, date range, and dropdown triggers.",
+      "height": 36,
+      "border_radius_token": "radius.md",
+      "background_color_token": "color.background.card",
+      "border_color_token": "color.border.subtle",
+      "text_color_token": "color.text.primary",
+      "placeholder_color_token": "color.text.muted",
+      "focus_state": {
+        "border_color_token": "color.accent",
+        "shadow": "0 0 0 1px rgba(37, 99, 235, 0.2)"
+      }
+    },
+    "dropdown": {
+      "description": "Used for date range and category selection. Visually similar to input with right-aligned chevron.",
+      "trigger_style": "Same as input with optional subtle background in color.background.card_muted.",
+      "menu_style": {
+        "background_color_token": "color.background.card",
+        "border_radius_token": "radius.md",
+        "shadow_token": "elevation.2",
+        "item_height": 32,
+        "item_typography_token": "body.sm"
+      }
+    },
+    "iconography": {
+      "description": "Simple, line-based icons with consistent stroke width.",
+      "stroke_width": 1.5,
+      "color_token_default": "color.neutral.600",
+      "active_color_token": "color.primary",
+      "guidelines": [
+        "Use lightweight icons that do not overpower typography.",
+        "Align icons tightly with text labels in navigation and buttons.",
+        "Avoid complex or overly illustrative icons; favor simple, geometric shapes."
+      ]
+    },
+    "avatars": {
+      "description": "Circular avatars used for user profile sections.",
+      "size_tokens": {
+        "sm": 24,
+        "md": 32,
+        "lg": 40,
+        "xl": 56
+      },
+      "border": "Optional thin white border when placed over colored backgrounds.",
+      "initials_style": "body.sm with medium weight, centered."
+    },
+    "status_indicators": {
+      "description": "Tiny dots or icons that indicate positive/negative trends or completion.",
+      "sizes": {
+        "dot": 8
+      },
+      "colors": {
+        "positive": "color.primary",
+        "negative": "color.negative",
+        "neutral": "color.neutral.300"
+      }
+    }
+  },
+  "design_principles": [
+    "Clarity over decoration: Every visual element should support understanding of financial data or navigation clarity.",
+    "Hierarchy through structure: Rely on layout, spacing, and type hierarchy to guide attention rather than heavy borders or bright colors.",
+    "Soft contrast: Use soft background contrasts and subtle shadows to create depth, avoiding harsh outlines.",
+    "Monochrome-first charts: Default charts to a mostly monochrome palette, introducing accent colors only for emphasis and key series.",
+    "Consistency in spacing: Use the defined spacing scale everywhere. Misaligned or inconsistent gaps should be treated as bugs.",
+    "Information density with breathing room: Present many metrics and cards on screen, but maintain enough whitespace that nothing feels cramped.",
+    "Minimal motion: If animations are added, keep them subtle and utilitarian (e.g., fade/slide on hover or load) rather than flashy.",
+    "Accessible contrast: Maintain sufficient contrast for text and key data points, especially in charts and small labels.",
+    "Predictable interactions: Buttons, inputs, and dropdowns should behave consistently across the app, with familiar hover and focus states."
+  ]
+}
+
+
